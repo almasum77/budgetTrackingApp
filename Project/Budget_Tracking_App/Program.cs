@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
-    internal class Program
+    public class Program : Wallet
     {
         static void Main(string[] args)
         {

@@ -1,0 +1,7 @@
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\bin\Debug\Budget_Tracking_App.exe.config
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\bin\Debug\Budget_Tracking_App.exe
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\bin\Debug\Budget_Tracking_App.pdb
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\obj\Debug\Budget_Tracking_App.csproj.AssemblyReference.cache
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\obj\Debug\Budget_Tracking_App.csproj.CoreCompileInputs.cache
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\obj\Debug\Budget_Tracking_App.exe
+E:\Westminster\Project\budgetTrackingApp\Project\Budget_Tracking_App\obj\Debug\Budget_Tracking_App.pdb
