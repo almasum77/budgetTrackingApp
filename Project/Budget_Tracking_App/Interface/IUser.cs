@@ -8,5 +8,6 @@ namespace Budget_Tracking_App.Interface
 {
     internal interface IUser
     {
+
     }
 }

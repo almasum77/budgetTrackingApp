@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budget_Tracking_App.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
-    public class Category
+    public class Category : ICategory
     {
         public string CategoryLabel { get; set; }
         public DateTime? OpeningDate { get; set; }
@@ -63,6 +64,21 @@ namespace Budget_Tracking_App
         {
 
             return 0.0;
+        }
+
+        DateTime ICategory.GetOpeningDate()
+        {
+            throw new NotImplementedException();
+        }
+
+        DateTime ICategory.GetClosingDate()
+        {
+            throw new NotImplementedException();
+        }
+
+        Budget ICategory.GetCategoryBudget()
+        {
+            throw new NotImplementedException();
         }
     }
 }

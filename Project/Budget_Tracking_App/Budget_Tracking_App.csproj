@@ -45,6 +45,10 @@
   <ItemGroup>
     <Compile Include="Budget.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Interface\ICategory.cs" />
+    <Compile Include="Interface\ITransaction.cs" />
+    <Compile Include="Interface\IUser.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="Program.cs" />
@@ -54,6 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="bin\Debug\Budget_Tracking_App.exe.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Budget_Tracking_App.exe" />
+    <Content Include="bin\Debug\Budget_Tracking_App.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

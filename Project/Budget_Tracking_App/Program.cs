@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
-    public class Program : Wallet
+    public class Program 
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello Guys");
+            Menu menu = new Menu();
+            menu.DisplayMainMenu();
         }
     }
 }
