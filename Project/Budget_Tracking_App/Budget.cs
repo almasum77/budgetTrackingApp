@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budget_Tracking_App.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace Budget_Tracking_App
 {
 
-    public class Budget
+    public class Budget : IBudgetAvailable
     {
         private double sumToAllocate;
         private double categoryBudget;
@@ -48,6 +49,11 @@ namespace Budget_Tracking_App
         public DateTime GetDate()
         {
             return monthAndYear;
+        }
+
+        public bool IsBudgetAvailable(double amount)
+        {
+            throw new NotImplementedException();
         }
 
         // Any other methods and business logic goes here

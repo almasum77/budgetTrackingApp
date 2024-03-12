@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
-    public class Category
+    public class Category: ITransactionDate
     {
         private string categoryLabel;
         private Budget budgetAllocated;
@@ -52,8 +52,12 @@ namespace Budget_Tracking_App
             return monthAndYear;
         }
 
-        //// Additional methods to manage transactions can be added here
-        //// For example, to add a transaction to the list:
+        public DateTime GetTransactionDate()
+        {
+            throw new NotImplementedException();
+        }
+
+
         //public void AddTransaction(Transaction transaction)
         //{
         //    transactionList.Add(transaction);
