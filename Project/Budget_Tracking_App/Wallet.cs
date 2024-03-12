@@ -1,125 +1,136 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
+
     public class Wallet
     {
         private List<Category> categoryList;
         private List<Budget> budgetHistory;
-        //private WalletRepository database;
 
         public Wallet()
         {
             categoryList = new List<Category>();
             budgetHistory = new List<Budget>();
-            //database = new WalletRepository();
         }
 
-        public bool CreateCategory(string label)
+        public bool CreateCategory(Category category)
         {
-             
+            if (category == null)
+            {
+                categoryList.Add(category);
+            }
             return true;
         }
 
-        public bool RenameCategory(string oldName, string newName)
+        public bool RenameCategory(Category category)
         {
-             
+            if (!categoryList.Contains(category))
+            {
+                categoryList.Add(category);
+            }
             return true;
         }
 
-        public bool RemoveCategory(string label)
+        public bool RemoveCategory(string label, DateTime monthYear)
         {
-             
+            Category remCate = categoryList.Where(s => s.GetCategoryLabel() == label && s.GetCategoryDate() == monthYear).FirstOrDefault();
+            if (remCate != null)
+            {
+                categoryList.Remove(remCate);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+        public bool AddBudget(Budget budget)
+        {
+            if(budget != null) 
+            {
+             budgetHistory.Add(budget);
+            }
             return true;
         }
 
-        public bool AddBudget(double amount)
+        public bool RemoveBudget(double amount, DateTime monthYear)
         {
-             
-            return true;
+            Budget remBud = budgetHistory.Where(s => s.get() == label && s.GetCategoryDate() == monthYear).FirstOrDefault();
+            if (remCate != null)
+            {
+                categoryList.Remove(remCate);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public bool ModifyBudget(double amount)
+        public bool AllocateBudgetToCategory(Category category, double amount)
         {
-             
-            return true;
-        }
-
-        public bool AllocateBudgetToCategory(string label, double amount)
-        {
-             
             return true;
         }
 
         public bool AddTransaction(double amount, DateTime date, string transactionId, string group)
         {
-             
             return true;
-        }
-
-        public void ApplyPeriodicTransaction()
-        {
-             
         }
 
         public bool ModifyTransactionAmount(string transactionId, double newAmount)
         {
-             
             return true;
         }
 
         public bool MoveTransaction(string transactionId, string originalGroup, string recipientGroup)
         {
-             
             return true;
         }
 
         public bool RemoveTransaction(string label, string transactionId)
         {
-             
             return true;
         }
 
-        public void DisplayAllOngoingTransactions()
+        public void DisplayAllOngoingTransactions(DateTime currentDate)
         {
-             
         }
 
-        public void DisplayOngoingTransactions(string label)
+        public void DisplayCategoryTransactions(string label, DateTime date)
         {
-             
         }
 
-        public void DisplayAllPastTransactions(string filename)
+        public void DisplayAllPastTransactions()
         {
-             
         }
 
-        public void DisplayPastTransactions(string filename, string label)
+        public void DisplayPastCategoryTransaction(string label)
         {
-             
         }
 
-        public bool AddTransactionDescription(string transactionId, string group)
+
+        public bool SaveCategoriesToFile(string filepath)
         {
-             
             return true;
         }
 
-        public bool ModifyTransactionDescription(string transactionId, string group)
+        public bool CloseAndOpenCategories(DateTime previousMonth, DateTime newMonth)
         {
-             
             return true;
         }
 
-        public bool RemoveTransactionDescription(string transactionId, string group)
+        public void TrackBudget(string label, DateTime monthYear)
         {
-             
-            return true;
         }
+
     }
+
 }

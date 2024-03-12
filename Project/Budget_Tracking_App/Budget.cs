@@ -6,56 +6,51 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
+
     public class Budget
     {
-        private double sum_to_allocate;
-        private double _remaining_budget;
-        private DateTime date;
+        private double sumToAllocate;
+        private double categoryBudget;
+        private DateTime monthAndYear;
 
-        public double SumToAllocate
+        public Budget(double sumToAllocate, double categoryBudget, DateTime monthAndYear)
         {
-            get { return sum_to_allocate; }
-            set { sum_to_allocate = value; }
-        }
-
-        public double RemainingBudget
-        {
-            get { return _remaining_budget; }
-            set { _remaining_budget = value; }
-        }
-
-        public DateTime Date
-        {
-            get { return date; }
-            set { date = value; }
+            this.sumToAllocate = sumToAllocate;
+            this.categoryBudget = categoryBudget;
+            this.monthAndYear = monthAndYear;
         }
 
         public void SetBudget(double amount)
         {
-             
+            sumToAllocate = amount;
+        }
+
+        public void SetCategoryBudget(double amount)
+        {
+            categoryBudget = amount;
         }
 
         public void SetDate(DateTime date)
         {
-             
+            monthAndYear = date;
         }
 
         public double GetBudget()
         {
-             
-            return 0.0;
+            return sumToAllocate;
         }
 
-        public DateTime GetBudgetDate()
+        public double GetCategoryBudget()
         {
-             
-            return new DateTime();
+            return categoryBudget;
         }
 
-        public bool CreateCategory(string label)
+        public DateTime GetDate()
         {
-             
-            return true;
+            return monthAndYear;
         }
+
+        // Any other methods and business logic goes here
     }
+
 }

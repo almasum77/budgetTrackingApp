@@ -46,11 +46,10 @@
     <Compile Include="Budget.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Interface\IBudgetAvailable.cs" />
     <Compile Include="Interface\ICategory.cs" />
     <Compile Include="Interface\ITransaction.cs" />
-    <Compile Include="Interface\IUser.cs" />
-    <Compile Include="Menu.cs" />
-    <Compile Include="Note.cs" />
+    <Compile Include="Interface\ITransactionDate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transaction.cs" />

@@ -7,78 +7,56 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
-    public class Category : ICategory
+    public class Category
     {
-        public string CategoryLabel { get; set; }
-        public DateTime? OpeningDate { get; set; }
-        public DateTime? ClosingDate { get; set; }
-        public double BudgetAllocated { get; set; }
-        public List<Transaction> TransactionList { get; set; }
+        private string categoryLabel;
+        private Budget budgetAllocated;
+        private DateTime monthAndYear;
+        private List<Transaction> transactionList;
 
-        public Category()
+        public Category(string label, Budget budget, DateTime date)
         {
-            TransactionList = new List<Transaction>();
+            categoryLabel = label;
+            budgetAllocated = budget;
+            monthAndYear = date;
+            transactionList = new List<Transaction>();
         }
 
         public void SetCategoryLabel(string label)
         {
-            CategoryLabel = label;
+            categoryLabel = label;
         }
 
-        public void SetCategoryBudget(double amount)
+        public void SetCategoryBudget(Budget budget)
         {
-            BudgetAllocated = amount;
+            budgetAllocated = budget;
         }
 
-        public void SetOpeningDate(DateTime openingDate)
+        public void SetCategoryDate(DateTime date)
         {
-            OpeningDate = openingDate;
-        }
-
-        public void SetClosingDate(DateTime closingDate)
-        {
-            ClosingDate = closingDate;
+            monthAndYear = date;
         }
 
         public string GetCategoryLabel()
         {
-            return CategoryLabel;
+            return categoryLabel;
         }
 
-        public DateTime? GetOpeningDate()
+        public Budget GetCategoryBudget()
         {
-            return OpeningDate;
+            return budgetAllocated;
         }
 
-        public DateTime? GetClosingDate()
+        public DateTime GetCategoryDate()
         {
-            return ClosingDate;
+            return monthAndYear;
         }
 
-        public double GetCategoryBudget()
-        {
-            return BudgetAllocated;
-        }
-
-        public double GetCategoryBalance()
-        {
-
-            return 0.0;
-        }
-
-        DateTime ICategory.GetOpeningDate()
-        {
-            throw new NotImplementedException();
-        }
-
-        DateTime ICategory.GetClosingDate()
-        {
-            throw new NotImplementedException();
-        }
-
-        Budget ICategory.GetCategoryBudget()
-        {
-            throw new NotImplementedException();
-        }
+        //// Additional methods to manage transactions can be added here
+        //// For example, to add a transaction to the list:
+        //public void AddTransaction(Transaction transaction)
+        //{
+        //    transactionList.Add(transaction);
+        //}
     }
 }

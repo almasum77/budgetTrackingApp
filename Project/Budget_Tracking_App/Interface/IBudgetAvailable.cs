@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App.Interface
 {
-    internal interface IUser
+    public interface IBudgetAvailable
     {
-
+        bool IsBudgetAvailable(double amount);
     }
 }
