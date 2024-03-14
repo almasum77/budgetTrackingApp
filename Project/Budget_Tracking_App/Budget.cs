@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budget_Tracking_App.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,56 +7,56 @@ using System.Threading.Tasks;
 
 namespace Budget_Tracking_App
 {
-    public class Budget
+
+    public class Budget : IBudgetAvailable
     {
-        private double sum_to_allocate;
-        private double _remaining_budget;
-        private DateTime date;
+        private double sumToAllocate;
+        public  double remainingBudget;
+        private DateTime monthAndYear;
 
-        public double SumToAllocate
+        public Budget(double sumToAllocate, DateTime monthAndYear)
         {
-            get { return sum_to_allocate; }
-            set { sum_to_allocate = value; }
-        }
-
-        public double RemainingBudget
-        {
-            get { return _remaining_budget; }
-            set { _remaining_budget = value; }
-        }
-
-        public DateTime Date
-        {
-            get { return date; }
-            set { date = value; }
+            this.sumToAllocate = sumToAllocate;
+            this.remainingBudget = sumToAllocate;
+            this.monthAndYear = monthAndYear;
         }
 
         public void SetBudget(double amount)
         {
-             
+            sumToAllocate = amount;
+        }
+
+        public void SetremainingBudget(double amount)
+        {
+            remainingBudget = amount;
         }
 
         public void SetDate(DateTime date)
         {
-             
+            monthAndYear = date;
         }
 
         public double GetBudget()
         {
-             
-            return 0.0;
+            return sumToAllocate;
         }
 
-        public DateTime GetBudgetDate()
+        public double GetremainingBudget()
         {
-             
-            return new DateTime();
+            return remainingBudget;
         }
 
-        public bool CreateCategory(string label)
+        public DateTime GetDate()
         {
-             
-            return true;
+            return monthAndYear;
         }
+
+        public bool IsBudgetAvailable(double amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Any other methods and business logic goes here
     }
+
 }
