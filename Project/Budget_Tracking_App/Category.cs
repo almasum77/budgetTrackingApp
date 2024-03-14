@@ -10,11 +10,11 @@ namespace Budget_Tracking_App
     public class Category: ITransactionDate
     {
         private string categoryLabel;
-        private Budget budgetAllocated;
+        private double budgetAllocated;
         private DateTime monthAndYear;
-        private List<Transaction> transactionList;
+        public List<Transaction> transactionList; //changed access modifier to public
 
-        public Category(string label, Budget budget, DateTime date)
+        public Category(string label, double budget, DateTime date)
         {
             categoryLabel = label;
             budgetAllocated = budget;
@@ -22,12 +22,17 @@ namespace Budget_Tracking_App
             transactionList = new List<Transaction>();
         }
 
+        public Category()
+        { 
+        }
+
         public void SetCategoryLabel(string label)
         {
             categoryLabel = label;
         }
 
-        public void SetCategoryBudget(Budget budget)
+        //changed parameter type form budget to double??????
+        public void SetCategoryBudget(double budget)
         {
             budgetAllocated = budget;
         }
@@ -42,7 +47,7 @@ namespace Budget_Tracking_App
             return categoryLabel;
         }
 
-        public Budget GetCategoryBudget()
+        public double GetCategoryBudget()
         {
             return budgetAllocated;
         }

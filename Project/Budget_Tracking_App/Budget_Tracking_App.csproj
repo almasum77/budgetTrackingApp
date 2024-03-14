@@ -47,8 +47,6 @@
     <Compile Include="Category.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Interface\IBudgetAvailable.cs" />
-    <Compile Include="Interface\ICategory.cs" />
-    <Compile Include="Interface\ITransaction.cs" />
     <Compile Include="Interface\ITransactionDate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

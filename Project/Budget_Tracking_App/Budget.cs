@@ -11,13 +11,13 @@ namespace Budget_Tracking_App
     public class Budget : IBudgetAvailable
     {
         private double sumToAllocate;
-        private double categoryBudget;
+        public static double remainingBudget=0;
         private DateTime monthAndYear;
 
-        public Budget(double sumToAllocate, double categoryBudget, DateTime monthAndYear)
+        public Budget(double sumToAllocate, DateTime monthAndYear)
         {
             this.sumToAllocate = sumToAllocate;
-            this.categoryBudget = categoryBudget;
+            //this.remainingBudget = remainingBudget;
             this.monthAndYear = monthAndYear;
         }
 
@@ -26,9 +26,9 @@ namespace Budget_Tracking_App
             sumToAllocate = amount;
         }
 
-        public void SetCategoryBudget(double amount)
+        public void SetremainingBudget(double amount)
         {
-            categoryBudget = amount;
+            remainingBudget = amount;
         }
 
         public void SetDate(DateTime date)
@@ -41,9 +41,9 @@ namespace Budget_Tracking_App
             return sumToAllocate;
         }
 
-        public double GetCategoryBudget()
+        public double GetremainingBudget()
         {
-            return categoryBudget;
+            return remainingBudget;
         }
 
         public DateTime GetDate()
