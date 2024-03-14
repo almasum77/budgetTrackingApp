@@ -130,30 +130,77 @@ namespace Budget_Tracking_App
         //changed parameters.......
         public bool AddTransaction(Transaction tran, string catLabel)
         {
-            DateTime currentDate = DateTime.Now.Date;
-            Category cat = categoryList.Where(w => w.GetCategoryLabel() == catLabel && w.GetCategoryDate() == currentDate).FirstOrDefault();
-            cat.transactionList.Add(tran);
-            return true;
+            DateTime currentDate = tran.GetTransactionDate().Date;
+            Category cat = categoryList.FirstOrDefault(w => w.GetCategoryLabel() == catLabel
+                         && w.GetCategoryDate().Month == currentDate.Month
+                         && w.GetCategoryDate().Year == currentDate.Year);
+
+            if (cat != null)
+            {
+                cat.transactionList.Add(tran);
+
+                Budget currentBudget = budgetHistory.FirstOrDefault(b => b.GetDate().Month == currentDate.Month && b.GetDate().Year == currentDate.Year);
+                if (currentBudget != null)
+                {
+                    double newAmount = currentBudget.GetremainingBudget() - tran.GetTransactionAmount();
+                    currentBudget.SetremainingBudget(newAmount);
+                }
+
+                return true;
+            }
+            return false;
         }
 
         public bool ModifyTransactionAmount(string transactionId, double newAmount)
         {
             Transaction transaction= categoryList.Select(w=>w.transactionList.Where(s=>s.GetTransactionNbr()==transactionId).FirstOrDefault()).FirstOrDefault();
-            transaction.SetTransactionAmount(newAmount);
-            return true;
+            if (transaction != null)
+            {
+                transaction.SetTransactionAmount(newAmount);
+
+                DateTime currentDate = transaction.GetTransactionDate().Date;
+                Budget currentBudget = budgetHistory.FirstOrDefault(b => b.GetDate().Month == currentDate.Month && b.GetDate().Year == currentDate.Year);
+                if (currentBudget != null)
+                {
+                    double newRemaining = currentBudget.GetremainingBudget() - transaction.GetTransactionAmount();
+                    currentBudget.SetremainingBudget(newRemaining);
+                }
+
+                return true;
+            }
+            return false;
         }
         // why group ????????????????????
-        public bool MoveTransaction(string transactionId,  string newCategoryLabel)
+        public bool MoveTransaction(string transactionId, string newCategoryLabel)
         {
-            var originalCategory = categoryList.FirstOrDefault(cat => cat.transactionList.Any(s => s.GetTransactionNbr() == transactionId));
+            var originalCategory = categoryList.FirstOrDefault(cat => cat.transactionList.Any(tran => tran.GetTransactionNbr() == transactionId));
+            if (originalCategory == null)
+            {
+                Console.WriteLine("Original category not found.");
+                return false; 
+            }
 
-            Transaction tran = categoryList.SelectMany(cat => cat.transactionList).FirstOrDefault(s => s.GetTransactionNbr() == transactionId);
-            categoryList.SelectMany(cat => cat.transactionList).FirstOrDefault(s => s.GetTransactionNbr() == transactionId);
+            var transaction = originalCategory.transactionList.FirstOrDefault(tran => tran.GetTransactionNbr() == transactionId);
+            if (transaction == null)
+            {
+                Console.WriteLine("Transaction not found.");
+                return false; 
+            }
 
-            //adding the transaciton to new category
-            originalCategory.transactionList.Add(tran);
+            var newCategory = categoryList.FirstOrDefault(cat => cat.GetCategoryLabel() == newCategoryLabel);
+            if (newCategory == null)
+            {
+                Console.WriteLine("New category not found.");
+                return false; 
+            }
+
+            originalCategory.transactionList.Remove(transaction);
+
+            newCategory.transactionList.Add(transaction);
+
             return true;
         }
+
         // removed parameter string label 
         public bool RemoveTransaction(string transactionId)
         {
@@ -168,20 +215,20 @@ namespace Budget_Tracking_App
 
         public void DisplayAllOngoingTransactions(DateTime currentDate)
         {
-            List<Category> currentCategoryList = categoryList.Where(s => s.GetCategoryDate() == currentDate).ToList();
+            List<Category> currentCategoryList = categoryList.Where(s => s.GetCategoryDate().Month == currentDate.Month && s.GetCategoryDate().Year==currentDate.Year).ToList();
             foreach (var category in currentCategoryList)
             {
                 Console.WriteLine($"Category Name: {category.GetCategoryLabel()}");
                 foreach (var transaction in category.transactionList)
                 {
-                    Console.WriteLine($"Transaction info: {transaction.GetTransactionNbr()},{transaction.GetTransactionDate()},{transaction.GetTransactionAmount()},{transaction.GetTransactionDescription()}");
+                    Console.WriteLine($"Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate()}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}");
                 }
             }
         }
 
         public void DisplayCategoryTransactions(string label, DateTime date)
         {
-            Category category = categoryList.Where(s => s.GetCategoryLabel() == label & s.GetCategoryDate() == date).FirstOrDefault();
+            Category category = categoryList.Where(s => s.GetCategoryLabel() == label & s.GetCategoryDate().Month == date.Month && s.GetCategoryDate().Year==date.Year).FirstOrDefault();
 
         }
 
@@ -192,7 +239,7 @@ namespace Budget_Tracking_App
                 Console.WriteLine($"Category Name: {category.GetCategoryLabel()}");
                 foreach (var transaction in category.transactionList)
                 {
-                    Console.WriteLine($"Transaction info: {transaction.GetTransactionNbr()},{transaction.GetTransactionDate()},{transaction.GetTransactionAmount()},{transaction.GetTransactionDescription()}");
+                    Console.WriteLine($"Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate()}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}");
                 }
             }
         }
@@ -206,23 +253,24 @@ namespace Budget_Tracking_App
                 Console.WriteLine($"Category Name: {category.GetCategoryLabel()}");
                 foreach (var transaction in category.transactionList)
                 {
-                    Console.WriteLine($"Transaction info: {transaction.GetTransactionNbr()},{transaction.GetTransactionDate()},{transaction.GetTransactionAmount()},{transaction.GetTransactionDescription()}");
+                    Console.WriteLine($"Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate()}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}");
                 }
             }
         }
 
-
-        public bool SaveCategoriesToFile(string filepath)
-        {
-            return true;
-        }
 
         //deleted previous month parameter and added category label
         public bool CloseAndOpenCategories(string catLabel,DateTime newMonth)
         {
             Category newCategory = new Category();
             newCategory = categoryList.Where(s => s.GetCategoryLabel() == catLabel).OrderByDescending(s=>s.GetCategoryDate()).FirstOrDefault();
-            return true;
+            if (newCategory != null)
+            {
+                newCategory.SetCategoryDate(newMonth);
+                categoryList.Add(newCategory);
+                return true;
+            }
+            return false;
         }
 
         //???????????
@@ -230,6 +278,10 @@ namespace Budget_Tracking_App
         {
             //List<Category> category = categoryList.Where(e=>e.GetCategoryLabel()==catLabel & e.GetCategoryDate()=)
             //show if overspend or not only
+        }
+        public bool SaveCategoriesToFile(string filepath)
+        {
+            return true;
         }
 
     }

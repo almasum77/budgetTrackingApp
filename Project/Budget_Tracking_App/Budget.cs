@@ -11,13 +11,13 @@ namespace Budget_Tracking_App
     public class Budget : IBudgetAvailable
     {
         private double sumToAllocate;
-        public static double remainingBudget=0;
+        public  double remainingBudget;
         private DateTime monthAndYear;
 
         public Budget(double sumToAllocate, DateTime monthAndYear)
         {
             this.sumToAllocate = sumToAllocate;
-            //this.remainingBudget = remainingBudget;
+            this.remainingBudget = sumToAllocate;
             this.monthAndYear = monthAndYear;
         }
 

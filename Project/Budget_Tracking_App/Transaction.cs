@@ -16,6 +16,13 @@ namespace Budget_Tracking_App
         private string transactionNbr;
         private string transactionDescription;
 
+        public Transaction(string trnNo, double amount, DateTime date, string note) 
+        {
+            transactionAmount = amount;
+            transactionDate = date;
+            transactionNbr = trnNo;
+            transactionDescription = note;
+        }
         public void SetTransactionAmount(double amount)
         {
             transactionAmount = amount;
