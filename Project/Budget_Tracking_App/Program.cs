@@ -12,6 +12,8 @@ namespace Budget_Tracking_App
         private static Wallet wallet = new Wallet();
         static void Main(string[] args)
         {
+            InitializePresetCategories();
+
             while (true)
             {
                 Console.Clear();
@@ -129,19 +131,20 @@ namespace Budget_Tracking_App
                 Console.WriteLine($"Category Menu:");
                 Console.WriteLine("1. Create");
                 Console.WriteLine("2. Rename Category Label");
-                Console.WriteLine("3. Delete");
-                Console.WriteLine("4. View");
-                Console.WriteLine("5. Return to Main Menu");
+                Console.WriteLine("3. Update Category Budget");
+                Console.WriteLine("4. Delete");
+                Console.WriteLine("5. View");
+                Console.WriteLine("6. Return to Main Menu");
                 Console.Write("\nSelect an option (1-5): ");
 
-                if (!int.TryParse(Console.ReadLine(), out int subChoice) || subChoice < 1 || subChoice > 5)
+                if (!int.TryParse(Console.ReadLine(), out int subChoice) || subChoice < 1 || subChoice > 6)
                 {
                     Console.WriteLine("Invalid choice, please try again.");
                     ContinuePrompt();
                     continue;
                 }
 
-                if (subChoice >= 5) break; 
+                if (subChoice >= 6) break; 
                 else if (subChoice == 1)
                 {
                     //Console.WriteLine("Category create function called");
@@ -155,9 +158,14 @@ namespace Budget_Tracking_App
                 else if (subChoice == 3)
                 {
                     //Console.WriteLine("Category Delete function called");
-                    RemoveCategoryFromInput();
+                    UpdateCategoryBudgetFromInput();
                 }
                 else if (subChoice == 4)
+                {
+                    //Console.WriteLine("Category Delete function called");
+                    RemoveCategoryFromInput();
+                }
+                else if (subChoice == 5)
                 {
                     //Console.WriteLine("Category View function called");
                     DisplayCategoriesFromInput();
@@ -216,6 +224,26 @@ namespace Budget_Tracking_App
         {
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
+        }
+
+        static void InitializePresetCategories()
+        {
+            var currentDate = DateTime.Now;
+            var monthAndYear = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+            // Preset categories for current month....
+            var presetCategories = new List<Category>
+        {
+            new Category("Food", 0, monthAndYear),
+            new Category("Transportation", 0, monthAndYear),
+            new Category("Entertainment", 0, monthAndYear),
+            new Category("Bills", 0, monthAndYear)
+        };
+
+            foreach (var category in presetCategories)
+            {
+                wallet.CreateCategory(category);
+            }
         }
 
         #region Category
@@ -278,6 +306,36 @@ namespace Budget_Tracking_App
                 Console.WriteLine("Failed to rename category. Make sure it exists and you entered the correct date.");
             }
         }
+        static void UpdateCategoryBudgetFromInput()
+        {
+            Console.WriteLine("Enter the category label:");
+            string label = Console.ReadLine();
+
+            Console.WriteLine("Enter the month and year for the category (format MM/yyyy):");
+            string monthYearInput = Console.ReadLine();
+            if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime monthYear))
+            {
+                Console.WriteLine("Invalid date format.");
+                return;
+            }
+
+            Console.WriteLine("Enter the new budget allocated for this category:");
+            if (!double.TryParse(Console.ReadLine(), out double newBudget))
+            {
+                Console.WriteLine("Invalid budget format. Please enter a valid number.");
+                return;
+            }
+
+            if (wallet.UpdateCategoryBudget(label, monthYear, newBudget))
+            {
+                Console.WriteLine($"Budget updated successfully for category '{label}' for the period {monthYearInput}.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to update budget. Category not found.");
+            }
+        }
+
         public static void RemoveCategoryFromInput()
         {
             Console.WriteLine("Enter the label of the category you want to remove:");
@@ -464,7 +522,7 @@ namespace Budget_Tracking_App
             }
             else
             {
-                Console.WriteLine("Failed to add transaction. Make sure the category exists.");
+                //Console.WriteLine("Failed to add transaction. Make sure the category exists.");
             }
         }
         static void ModifyTransactionAmountFromInput()

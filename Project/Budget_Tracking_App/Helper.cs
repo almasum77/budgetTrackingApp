@@ -10,7 +10,7 @@ namespace Budget_Tracking_App
     {
         public static string GenerateTransactionNo() 
         {
-            Guid guid = new Guid();
+            Guid guid = Guid.NewGuid();
             string guidString = guid.ToString("N");
 
             string transactionNo = guidString.Substring(0, 8);
