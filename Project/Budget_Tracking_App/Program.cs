@@ -252,7 +252,7 @@ namespace Budget_Tracking_App
             Console.WriteLine("Enter category label:");
             string label = Console.ReadLine();
 
-            Console.WriteLine("Enter budget allocated for this category:");
+            Console.WriteLine("Enter budget allocated for this category (optional):");
             string budgetInput = Console.ReadLine();
             if (!double.TryParse(budgetInput, out double budgetAllocated))
             {
