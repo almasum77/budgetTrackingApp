@@ -283,21 +283,29 @@ namespace Budget_Tracking_App
         }
         static void RenameCategoryFromInput()
         {
-            DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1); // This sets the time to the first day of the current month
 
-            Console.WriteLine("Current month's categories:");
-            wallet.DisplayCategories(currentDate); // Assumes DisplayCategories method is updated to accept DateTime
+            Console.WriteLine("Enter the Month and Year for the category you wish to rename (format MM/yyyy):");
+            string monthYearInput = Console.ReadLine();
+            DateTime monthYear;
 
-            // Ask for the old label
+            if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", null, System.Globalization.DateTimeStyles.None, out monthYear))
+            {
+                Console.WriteLine("Invalid date format. Please use MM/yyyy format.");
+                return;
+            }
+
+            Console.WriteLine($"Current categories for {monthYear.ToString("MM/yyyy")}:");
+            wallet.DisplayCategories(monthYear);
+
+            // Asking for the old label
             Console.WriteLine("Enter the label of the category you wish to rename:");
             string oldLabel = Console.ReadLine();
 
-            // Ask for the new label
+            // Asking for the new label
             Console.WriteLine("Enter the new label for the category:");
             string newLabel = Console.ReadLine();
 
-            // Perform the renaming
-            if (wallet.RenameCategory(oldLabel, newLabel, currentDate))
+            if (wallet.RenameCategory(oldLabel, newLabel, monthYear))
             {
                 Console.WriteLine("Category renamed successfully.");
             }
