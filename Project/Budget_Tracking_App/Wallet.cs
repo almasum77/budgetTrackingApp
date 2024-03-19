@@ -24,9 +24,15 @@ namespace Budget_Tracking_App
         {
             if (category != null)
             {
-                categoryList.Add(category);
+                Category preCat = categoryList.Where(e => e.GetCategoryLabel().ToLower() == category.GetCategoryLabel().ToLower() && e.GetCategoryDate().Month==category.GetCategoryDate().Month && e.GetCategoryDate().Year == category.GetCategoryDate().Year).FirstOrDefault();
+                if (preCat == null)
+                {
+                    categoryList.Add(category);
+                    return true;
+                }
+                
             }
-            return true;
+            return false;
         }
 
         //new added
@@ -43,7 +49,16 @@ namespace Budget_Tracking_App
             Console.WriteLine($"Categories for {monthYear.ToString("MM/yyyy")}:");
             foreach (var category in filteredCategories)
             {
-                Console.WriteLine($"- {category.GetCategoryLabel()} (Budget: {category.GetCategoryBudget()})");
+                string type = "";
+                if (category.GetIsExpense() == true)
+                { 
+                    type = "Expense"; 
+                }
+                else
+                {
+                    type = "Income";
+                }
+                Console.WriteLine($"- {category.GetCategoryLabel()} (Budget: {category.GetCategoryBudget()} and Type: {type})");
             }
         }
 
@@ -142,41 +157,51 @@ namespace Budget_Tracking_App
         //changed parameters.......
         public bool AddTransaction(Transaction tran, string catLabel)
         {
-            DateTime currentDate = tran.GetTransactionDate().Date;
+            DateTime tranDate = tran.GetTransactionDate().Date;
+            
             Category cat = categoryList.FirstOrDefault(w => w.GetCategoryLabel().ToLower() == catLabel.ToLower()
-                             && w.GetCategoryDate().Month == currentDate.Month
-                             && w.GetCategoryDate().Year == currentDate.Year);
+                             && w.GetCategoryDate().Month == tranDate.Month
+                             && w.GetCategoryDate().Year == tranDate.Year);
 
             if (cat != null)
             {
-                Budget currentBudget = budgetHistory.FirstOrDefault(b => b.GetDate().Month == currentDate.Month && b.GetDate().Year == currentDate.Year);
+                Budget budget = budgetHistory.FirstOrDefault(b => b.GetDate().Month == tranDate.Month && b.GetDate().Year == tranDate.Year);
 
-                if (currentBudget != null)
+                if (cat.GetIsExpense() == false)
                 {
-                    //Check if adding the transaction would exceed the remaining budget
-                    double newAmountAfterTransaction = currentBudget.GetremainingBudget() - tran.GetTransactionAmount();
-
-                    if (newAmountAfterTransaction >= 0)
-                    {
-                        cat.transactionList.Add(tran);
-
-                        currentBudget.SetremainingBudget(newAmountAfterTransaction);
-                        TrackBudgetByCategory(cat.GetCategoryLabel(), tran.GetTransactionDate());
-
-                        return true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Adding this transaction would exceed the remaining budget for this month.");
-                        return false;
-                    }
+                    cat.transactionList.Add(tran);
+                    return true;
                 }
                 else
                 {
-                    //No budget found for the current month
-                    Console.WriteLine("No budget found for the current month. Transaction cannot be added.");
-                    return false;
+                    if (budget != null && cat.GetIsExpense() == true)
+                    {
+                        //Check if adding the transaction would exceed the remaining budget
+                        double newAmountAfterTransaction = budget.GetremainingBudget() - tran.GetTransactionAmount();
+
+                        if (newAmountAfterTransaction >= 0)
+                        {
+                            cat.transactionList.Add(tran);
+
+                            budget.SetremainingBudget(newAmountAfterTransaction);
+                            TrackBudgetByCategory(cat.GetCategoryLabel(), tran.GetTransactionDate());
+
+                            return true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Adding this transaction would exceed the remaining budget for this month.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        //No budget found for the current month
+                        Console.WriteLine("No budget found for the current month. Transaction cannot be added.");
+                        return false;
+                    }
                 }
+
             }
             else
             {
@@ -260,11 +285,18 @@ namespace Budget_Tracking_App
                 return false; 
             }
 
-            originalCategory.transactionList.Remove(transaction);
+            if (originalCategory.GetIsExpense() == newCategory.GetIsExpense())
+            {
+                originalCategory.transactionList.Remove(transaction);
+                newCategory.transactionList.Add(transaction);
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Category Types are not same. Cannot move transaction between Income and Expencse type");
+            }
 
-            newCategory.transactionList.Add(transaction);
-
-            return true;
+            return false;
         }
 
         // removed parameter string label 
@@ -284,10 +316,21 @@ namespace Budget_Tracking_App
             List<Category> currentCategoryList = categoryList.Where(s => s.GetCategoryDate().Month == currentDate.Month && s.GetCategoryDate().Year==currentDate.Year).ToList();
             foreach (var category in currentCategoryList)
             {
+
                 Console.WriteLine($"Category Name: {category.GetCategoryLabel()}");
                 foreach (var transaction in category.transactionList)
                 {
-                    Console.WriteLine($"---Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}");
+                    string recuring;
+                    if (transaction.GetIsMonthlyRecurring() == true)
+                    {
+                        recuring = "Yes";
+                    }
+                    else
+                    {
+                        recuring = "No";
+                    }
+
+                    Console.WriteLine($"---Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}, Monthly Recurring: {recuring}");
                 }
             }
         }
@@ -295,7 +338,23 @@ namespace Budget_Tracking_App
         public void DisplayCategoryTransactions(string label, DateTime date)
         {
             Category category = categoryList.Where(s => s.GetCategoryLabel().ToLower() == label.ToLower() & s.GetCategoryDate().Month == date.Month && s.GetCategoryDate().Year==date.Year).FirstOrDefault();
+            
+            
+            Console.WriteLine($"Category Name: {category.GetCategoryLabel()}, Month: {date.Month}-{date.Year}");
+            foreach (var transaction in category.transactionList)
+            {
+                string recuring;
+                if (transaction.GetIsMonthlyRecurring() == true)
+                {
+                    recuring = "Yes";
+                }
+                else
+                {
+                    recuring = "No";
+                }
 
+                Console.WriteLine($"---Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}, Monthly Recurring: {recuring}");
+            }
         }
 
         public void DisplayAllPastTransactions()
@@ -303,9 +362,20 @@ namespace Budget_Tracking_App
             foreach (var category in categoryList)
             {
                 Console.WriteLine($"Category Name: {category.GetCategoryLabel()}");
+                Console.WriteLine($"  Month: {category.GetCategoryDate().Month}/{category.GetCategoryDate().Year}");
                 foreach (var transaction in category.transactionList)
                 {
-                    Console.WriteLine($"---Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}");
+                    string recuring;
+                    if (transaction.GetIsMonthlyRecurring() == true)
+                    {
+                        recuring = "Yes";
+                    }
+                    else
+                    {
+                        recuring = "No";
+                    }
+                    
+                    Console.WriteLine($"    Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}, Monthly Recurring: {recuring}");
                 }
             }
         }
@@ -319,7 +389,17 @@ namespace Budget_Tracking_App
                 Console.WriteLine($"Category Name: {category.GetCategoryLabel()}");
                 foreach (var transaction in category.transactionList)
                 {
-                    Console.WriteLine($"---Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}");
+                    string recuring;
+                    if (transaction.GetIsMonthlyRecurring() == true)
+                    {
+                        recuring = "Yes";
+                    }
+                    else
+                    {
+                        recuring = "No";
+                    }
+
+                    Console.WriteLine($"---Transaction info: {transaction.GetTransactionNbr()},Date:{transaction.GetTransactionDate().ToString("dd/MM/yyyy")}, Amount:{transaction.GetTransactionAmount()},Note:{transaction.GetTransactionDescription()}, Monthly Recurring: {recuring}");
                 }
             }
         }
@@ -365,10 +445,97 @@ namespace Budget_Tracking_App
         }
 
 
-        public bool SaveCategoriesToFile(string filepath)
+        public void TrackOverallBudget(DateTime monthYear)
         {
-            return true;
+            double totalBudget = budgetHistory.Where(s=>s.GetDate().Month==monthYear.Month && s.GetDate().Year==monthYear.Year).Select(b=>b.GetBudget()).FirstOrDefault();
+            double totalExpenses = 0;
+            double totalIncome = 0;
+
+            var filteredCategories = categoryList
+                                     .Where(c => c.GetCategoryDate().Year == monthYear.Year &&
+                                                 c.GetCategoryDate().Month == monthYear.Month)
+                                     .ToList();
+            Console.WriteLine($"__________ Budget and Expenses for {monthYear:MM/yyyy} __________");
+
+            foreach (var category in filteredCategories.Where(s=>s.GetIsExpense()==true))
+            {
+                double categoryBudget = category.GetCategoryBudget();
+                double categoryExpenses = category.transactionList
+                                          .Sum(t => t.GetTransactionAmount());
+                totalExpenses += categoryExpenses;
+
+                Console.WriteLine($"Category: {category.GetCategoryLabel()}, Budget: {categoryBudget}, Expenses: {categoryExpenses}");
+            }
+
+            Console.WriteLine($"Total Budget: {totalBudget}, Total Expenses: {totalExpenses}");
+
+            double remainingBudget = totalBudget - totalExpenses;
+            Console.WriteLine($"Remaining Budget: {remainingBudget}");
+
+            Console.WriteLine($"__________ Income for {monthYear:MM/yyyy} __________");
+            foreach (var category in filteredCategories.Where(s => s.GetIsExpense() == false))
+            {
+                double categoryIncome = category.transactionList
+                                          .Sum(t => t.GetTransactionAmount());
+                totalIncome += categoryIncome;
+
+                Console.WriteLine($"Category: {category.GetCategoryLabel()}, Income: {totalIncome}");
+            }
+            Console.WriteLine($"Total Income: {totalIncome}");
+
         }
+
+        public bool ApplyRepeatingTransactions()
+        {
+            DateTime fromMonthYear = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1); 
+            DateTime toMonthYear = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            Budget budget = budgetHistory.FirstOrDefault(b => b.GetDate().Month == toMonthYear.Month && b.GetDate().Year == toMonthYear.Year);
+
+            if (budget == null)
+            {
+                Console.WriteLine("You need to set Monthly budget first for any transaction");
+                return false;
+            }
+
+            foreach (var category in categoryList.Where(c => c.GetCategoryDate().Month == fromMonthYear.Month && c.GetCategoryDate().Year == fromMonthYear.Year))
+            {
+                var recurringTransactions = category.transactionList.Where(t => t.GetIsMonthlyRecurring()).ToList();
+
+                // Duplicate each recurring transaction for the new month.
+                foreach (var transaction in recurringTransactions)
+                {
+                    Transaction newTransaction = new Transaction(
+                        Helper.GenerateTransactionNo(),
+                        transaction.GetTransactionAmount(),
+                        new DateTime(toMonthYear.Year, toMonthYear.Month, Math.Min(DateTime.DaysInMonth(toMonthYear.Year, toMonthYear.Month), transaction.GetTransactionDate().Day)), 
+                        transaction.GetTransactionDescription(),
+                        true 
+                    );
+
+                    var newMonthCategory = categoryList.FirstOrDefault(c =>
+                        c.GetCategoryLabel().Equals(category.GetCategoryLabel(), StringComparison.OrdinalIgnoreCase) &&
+                        c.GetCategoryDate().Month == toMonthYear.Month &&
+                        c.GetCategoryDate().Year == toMonthYear.Year);
+
+                    if (newMonthCategory == null)
+                    {
+                        newMonthCategory = new Category(
+                            category.GetCategoryLabel(),
+                            0, 
+                            new DateTime(toMonthYear.Year, toMonthYear.Month, 1),
+                            category.GetIsExpense() 
+                        );
+                        categoryList.Add(newMonthCategory);
+                    }
+
+                    newMonthCategory.transactionList.Add(newTransaction);
+                }
+            }
+
+            return true; 
+        }
+
 
     }
 

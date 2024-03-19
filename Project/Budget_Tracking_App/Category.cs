@@ -12,14 +12,16 @@ namespace Budget_Tracking_App
         private string categoryLabel;
         private double budgetAllocated;
         private DateTime monthAndYear;
+        private bool isExpense;
         public List<Transaction> transactionList; //changed access modifier to public
 
-        public Category(string label, double budget, DateTime date)
+        public Category(string label, double budget, DateTime date, bool isExpense)
         {
             categoryLabel = label;
             budgetAllocated = budget;
             monthAndYear = date;
             transactionList = new List<Transaction>();
+            this.isExpense = isExpense; 
         }
 
         public Category()
@@ -62,6 +64,16 @@ namespace Budget_Tracking_App
             throw new NotImplementedException();
         }
 
+        public void SetIsExpense(bool isExp) 
+        {
+            isExpense = isExp;
+
+        }
+
+        public bool GetIsExpense()
+        { 
+            return isExpense;   
+        }
 
         //public void AddTransaction(Transaction transaction)
         //{
