@@ -15,13 +15,15 @@ namespace Budget_Tracking_App
         private DateTime transactionDate;
         private string transactionNbr;
         private string transactionDescription;
+        private bool isMonthlyRecurring;
 
-        public Transaction(string trnNo, double amount, DateTime date, string note) 
+        public Transaction(string trnNo, double amount, DateTime date, string note,bool isRecuring=false) 
         {
             transactionAmount = amount;
             transactionDate = date;
             transactionNbr = trnNo;
             transactionDescription = note;
+            isMonthlyRecurring = isRecuring;
         }
         public void SetTransactionAmount(double amount)
         {
@@ -61,6 +63,16 @@ namespace Budget_Tracking_App
         public string GetTransactionDescription()
         {
             return transactionDescription;
+        }
+
+        public bool GetIsMonthlyRecurring()
+        {
+            return isMonthlyRecurring;
+        }
+
+        public void SetIsMonthlyRecurring(bool isRec)
+        {
+            isMonthlyRecurring = isRec;
         }
     }
 
