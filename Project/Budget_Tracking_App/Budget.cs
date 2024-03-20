@@ -56,7 +56,6 @@ namespace Budget_Tracking_App
             throw new NotImplementedException();
         }
 
-        // Any other methods and business logic goes here
     }
 
 }

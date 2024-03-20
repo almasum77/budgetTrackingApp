@@ -75,9 +75,5 @@ namespace Budget_Tracking_App
             return isExpense;   
         }
 
-        //public void AddTransaction(Transaction transaction)
-        //{
-        //    transactionList.Add(transaction);
-        //}
     }
 }
