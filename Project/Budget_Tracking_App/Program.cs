@@ -24,6 +24,7 @@ namespace Budget_Tracking_App
                 Console.WriteLine("3. Budget");
                 Console.WriteLine("4. Track Budget, Expense and Income");
                 Console.WriteLine("5. Exit");
+                Console.WriteLine("Note: You need to add monthly budget before doing any transaciton for that month");
                 Console.Write("\nSelect an option (1-5): ");
 
                 if (!int.TryParse(Console.ReadLine(), out int mainChoice) || mainChoice < 1 || mainChoice > 5)
@@ -305,18 +306,21 @@ namespace Budget_Tracking_App
             Console.WriteLine("Enter category label:");
             string label = Console.ReadLine();
 
-            Console.WriteLine("Enter budget allocated for this category (optional, press Enter to skip):");
-            string budgetInput = Console.ReadLine();
-            double budgetAllocated = 0;
-            if (!string.IsNullOrWhiteSpace(budgetInput) && !double.TryParse(budgetInput, out budgetAllocated))
-            {
-                Console.WriteLine("Invalid budget format. Setting budget to default (0).");
-            }
-
             Console.WriteLine("Is this category for an expense? (yes/no):");
             string isExpenseInput = Console.ReadLine().Trim().ToLower();
             bool isExpense = isExpenseInput == "yes" || isExpenseInput == "y";
 
+            double budgetAllocated = 0;
+            if (isExpense)
+            {
+                Console.WriteLine("Enter budget allocated for this category (optional, press Enter to skip):");
+                string budgetInput = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(budgetInput) && !double.TryParse(budgetInput, out budgetAllocated))
+                {
+                    Console.WriteLine("Invalid budget format. Setting budget to default (0).");
+                }
+            }
+            
             Console.WriteLine("Enter month and year for the category (format MM/yyyy):");
             string monthYearInput = Console.ReadLine();
 

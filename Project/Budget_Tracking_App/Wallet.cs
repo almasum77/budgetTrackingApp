@@ -413,7 +413,11 @@ namespace Budget_Tracking_App
             if (newCategory != null)
             {
                 newCategory.SetCategoryDate(newMonth);
-                categoryList.Add(newCategory);
+                if (!categoryList.Contains(newCategory))
+                {
+                    categoryList.Add(newCategory);
+                }
+                
                 return true;
             }
             return false;
