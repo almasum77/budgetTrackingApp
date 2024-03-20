@@ -285,6 +285,7 @@ namespace Budget_Tracking_App
             Transaction salaryTransaction = new Transaction("TR5678", 3000, new DateTime(2024, 1, 1), "Monthly Salary", false);
             Transaction foodTransactionFebruary = new Transaction("TR2345", 300, new DateTime(2024, 2, 7), "Grocery shopping", false);
             Transaction salaryTransactionFebruary = new Transaction("TR6789", 3200, new DateTime(2024, 2, 1), "Monthly Salary", false);
+            //Transaction BillsTransactionFeb = new Transaction("TR8910", 150, new DateTime(2024, 2, 14), "Weekend Dinner", true);
             Transaction BillsTransactionFeb = new Transaction("TR8910", 150, new DateTime(2024, 2, 14), "Weekend Dinner", true);
 
             wallet.AddTransaction(foodTransaction, foodCategoryJan.GetCategoryLabel());
