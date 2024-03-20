@@ -42,7 +42,9 @@ namespace Budget_Tracking_App
 
             if (!filteredCategories.Any())
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("No categories found for the specified month and year.");
+                Console.ResetColor();
                 return;
             }
 
@@ -190,14 +192,18 @@ namespace Budget_Tracking_App
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.WriteLine("Adding this transaction would exceed the remaining budget for this month.");
+                            Console.ResetColor();
                             return false;
                         }
                     }
                     else
                     {
                         //No budget found for the current month
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("No budget found for the current month. Transaction cannot be added.");
+                        Console.ResetColor();
                         return false;
                     }
                 }
@@ -206,7 +212,9 @@ namespace Budget_Tracking_App
             else
             {
                 //Category not found
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Category not found. Transaction cannot be added.");
+                Console.ResetColor();
                 return false;
             }
         }
@@ -245,19 +253,25 @@ namespace Budget_Tracking_App
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Modifying this transaction would exceed the remaining budget for this month.");
+                        Console.ResetColor();
                         return false;
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("No budget found for the month of the transaction. Cannot modify the transaction amount.");
+                    Console.ResetColor();
                     return false;
                 }
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Transaction not found.");
+                Console.ResetColor();
                 return false;
             }
         }
@@ -267,21 +281,26 @@ namespace Budget_Tracking_App
             var originalCategory = categoryList.FirstOrDefault(cat => cat.transactionList.Any(tran => tran.GetTransactionNbr().ToLower() == transactionId.ToLower()));
             if (originalCategory == null)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Original category not found.");
+                Console.ResetColor();
                 return false; 
             }
 
             var transaction = originalCategory.transactionList.FirstOrDefault(tran => tran.GetTransactionNbr().ToLower() == transactionId.ToLower());
             if (transaction == null)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Transaction not found.");
+                Console.ResetColor();
                 return false; 
             }
 
             var newCategory = categoryList.FirstOrDefault(cat => cat.GetCategoryLabel().ToLower() == newCategoryLabel.ToLower());
             if (newCategory == null)
-            {
+            {   Console.ForegroundColor= ConsoleColor.DarkRed;
                 Console.WriteLine("New category not found.");
+                Console.ResetColor();  
                 return false; 
             }
 
@@ -293,7 +312,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Category Types are not same. Cannot move transaction between Income and Expencse type");
+                Console.ResetColor();  
             }
 
             return false;
@@ -440,11 +461,15 @@ namespace Budget_Tracking_App
             // Compare the total spent against the budget
             if (category.GetCategoryBudget()>0 & totalSpent > category.GetCategoryBudget() )
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"<Warning>: You have exceeded your budget for {category.GetCategoryLabel()} in {monthYear.ToString("MM/yyyy")}. Budget: {category.GetCategoryBudget()}, Spent: {totalSpent}");
+                Console.ResetColor();
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"For {category.GetCategoryLabel()} in {monthYear.ToString("MM/yyyy")}, you have spent {totalSpent} out of your budget of {category.GetCategoryBudget()}.");
+                Console.ResetColor();
             }
         }
 
@@ -467,8 +492,9 @@ namespace Budget_Tracking_App
                 double categoryExpenses = category.transactionList
                                           .Sum(t => t.GetTransactionAmount());
                 totalExpenses += categoryExpenses;
-
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Category: {category.GetCategoryLabel()}, Budget: {categoryBudget}, Expenses: {categoryExpenses}");
+                Console.ResetColor();
             }
 
             Console.WriteLine($"Total Budget: {totalBudget}, Total Expenses: {totalExpenses}");
@@ -482,10 +508,11 @@ namespace Budget_Tracking_App
                 double categoryIncome = category.transactionList
                                           .Sum(t => t.GetTransactionAmount());
                 totalIncome += categoryIncome;
-
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"Category: {category.GetCategoryLabel()}, Income: {totalIncome}");
             }
             Console.WriteLine($"Total Income: {totalIncome}");
+            Console.ResetColor();
 
         }
 
@@ -498,7 +525,9 @@ namespace Budget_Tracking_App
 
             if (budget == null)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("You need to set Monthly budget first for any transaction");
+                Console.ResetColor();
                 return false;
             }
 

@@ -292,12 +292,7 @@ namespace Budget_Tracking_App
             wallet.AddTransaction(foodTransactionFebruary, foodCategoryFeb.GetCategoryLabel());
             wallet.AddTransaction(salaryTransactionFebruary, salaryCategoryFeb.GetCategoryLabel());
             wallet.AddTransaction(BillsTransactionFeb, BillsCategoryFeb.GetCategoryLabel());
-            // Associate Transactions with Categories
-            //foodCategoryJan.transactionList.Add(foodTransaction);
-            //salaryCategoryJan.transactionList.Add(salaryTransaction);
-            //foodCategoryFeb.transactionList.Add(foodTransactionFebruary);
-            //salaryCategoryFeb.transactionList.Add(salaryTransactionFebruary);
-            //BillsCategoryFeb.transactionList.Add(BillsTransactionFeb);
+
         }
 
         #region Category
@@ -317,7 +312,9 @@ namespace Budget_Tracking_App
                 string budgetInput = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(budgetInput) && !double.TryParse(budgetInput, out budgetAllocated))
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Invalid budget format. Setting budget to default (0).");
+                    Console.ResetColor();
                 }
             }
             
@@ -333,12 +330,16 @@ namespace Budget_Tracking_App
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Failed to create category.");
+                    Console.ResetColor();
                 }
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please try again.");
+                Console.ResetColor();
             }
         }
 
@@ -351,7 +352,9 @@ namespace Budget_Tracking_App
 
             if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", null, System.Globalization.DateTimeStyles.None, out monthYear))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please use MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
 
@@ -372,7 +375,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to rename category. Make sure it exists and you entered the correct date.");
+                Console.ResetColor();
             }
         }
         static void UpdateCategoryBudgetFromInput()
@@ -384,14 +389,18 @@ namespace Budget_Tracking_App
             string monthYearInput = Console.ReadLine();
             if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime monthYear))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format.");
+                Console.ResetColor();
                 return;
             }
 
             Console.WriteLine("Enter the new budget allocated for this category:");
             if (!double.TryParse(Console.ReadLine(), out double newBudget))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid budget format. Please enter a valid number.");
+                Console.ResetColor();
                 return;
             }
 
@@ -401,7 +410,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to update budget. Category not found.");
+                Console.ResetColor();
             }
         }
 
@@ -415,7 +426,9 @@ namespace Budget_Tracking_App
 
             if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime monthYear))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please use MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
 
@@ -427,7 +440,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Category not found or could not be removed.");
+                Console.ResetColor();
             }
         }
         public static void DisplayCategoriesFromInput()
@@ -437,7 +452,9 @@ namespace Budget_Tracking_App
 
             if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime monthYear))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please use MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
             wallet.DisplayCategories(monthYear);
@@ -452,7 +469,9 @@ namespace Budget_Tracking_App
             string sumInput = Console.ReadLine();
             if (!double.TryParse(sumInput, out double sumToAllocate))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid sum format. Please enter a valid number.");
+                Console.ResetColor();
                 return;
             }
 
@@ -467,12 +486,16 @@ namespace Budget_Tracking_App
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Failed to add budget.");
+                    Console.ResetColor();
                 }
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please follow the MM/yyyy format.");
+                Console.ResetColor();
             }
         }
         static void RemoveBudgetFromInput()
@@ -490,17 +513,23 @@ namespace Budget_Tracking_App
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("Failed to remove budget.");
+                        Console.ResetColor();
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine($"No budget found for {monthYear.ToString("MM/yyyy")}");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                 }
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please follow the MM/yyyy format.");
+                Console.ResetColor();
             }
         }
         static void AllocateBudgetToCategoryFromInput()
@@ -511,7 +540,9 @@ namespace Budget_Tracking_App
             Console.WriteLine("Enter the amount to allocate:");
             if (!double.TryParse(Console.ReadLine(), out double amount))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid amount format. Please enter a valid number.");
+                Console.ResetColor();
                 return;
             }
 
@@ -519,7 +550,9 @@ namespace Budget_Tracking_App
             string monthYearInput = Console.ReadLine();
             if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime monthYear))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please follow the MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
 
@@ -529,7 +562,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to allocate budget. Make sure the category exists and the date is correct.");
+                Console.ResetColor();
             }
         }
         static void ViewBudgetByDate()
@@ -539,7 +574,9 @@ namespace Budget_Tracking_App
             DateTime monthYear;
             if (!DateTime.TryParseExact(monthYearInput, "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out monthYear))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please follow the MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
 
@@ -552,7 +589,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("No budget found for the specified month and year.");
+                Console.ResetColor();
             }
         }
         #endregion
@@ -566,14 +605,18 @@ namespace Budget_Tracking_App
             Console.WriteLine("Enter the amount of the transaction:");
             if (!double.TryParse(Console.ReadLine(), out double amount))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid amount. Please enter a valid number.");
+                Console.ResetColor();
                 return;
             }
 
             Console.WriteLine("Enter the date of the transaction (format dd/MM/yyyy):");
             if (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime date))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please follow the dd/MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
 
@@ -595,7 +638,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to add transaction. Make sure the category exists and the date is within the category's budget period.");
+                Console.ResetColor();
             }
         }
 
@@ -607,7 +652,9 @@ namespace Budget_Tracking_App
             Console.WriteLine("Enter the new amount for the transaction:");
             if (!double.TryParse(Console.ReadLine(), out double newAmount))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid amount format. Please enter a valid number.");
+                Console.ResetColor();
                 return;
             }
 
@@ -617,7 +664,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to update transaction amount. Make sure the transaction ID is correct.");
+                Console.ResetColor();
             }
         }
         static void MoveTransactionFromInput()
@@ -636,7 +685,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to move the transaction. Please check the inputs and try again.");
+                Console.ResetColor();
             }
         }
         static void RemoveTransactionFromInput()
@@ -650,7 +701,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Failed to remove transaction. Please ensure the transaction ID is correct.");
+                Console.ResetColor();
             }
         }
         static void DisplayAllOngoingTransactionsFromInput()
@@ -677,7 +730,9 @@ namespace Budget_Tracking_App
 
             if (!DateTime.TryParseExact(dateInput, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime date))
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please enter the date in dd/MM/yyyy format.");
+                Console.ResetColor();
                 return;
             }
 
@@ -713,12 +768,16 @@ namespace Budget_Tracking_App
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Failed to close and open category. Make sure the category exists.");
+                    Console.ResetColor();
                 }
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format.");
+                Console.ResetColor();
             }
         }
 
@@ -731,7 +790,9 @@ namespace Budget_Tracking_App
 
             if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > 2)
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid choice, please try again.");
+                Console.ResetColor();
                 return;
             }
 
@@ -745,7 +806,9 @@ namespace Budget_Tracking_App
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine("Failed to carry over recurring transactions.");
+                    Console.ResetColor();
                 }
             }
             else
@@ -767,7 +830,9 @@ namespace Budget_Tracking_App
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("Invalid date format. Please follow the MM/yyyy format.");
+                Console.ResetColor();
             }
 
             ContinuePrompt();
