@@ -426,7 +426,6 @@ namespace Budget_Tracking_App
         }
 
 
-        //deleted previous month parameter and added category label
         public bool CloseAndOpenCategories(string catLabel,DateTime newMonth)
         {
             Category newCategory = new Category();
@@ -444,7 +443,6 @@ namespace Budget_Tracking_App
             return false;
         }
 
-        //name cahnged from TrackBudget
         public void TrackBudgetByCategory(string catLabel, DateTime monthYear)
         {
             Category category = categoryList.Where(e => e.GetCategoryLabel().ToLower() == catLabel.ToLower() & e.GetCategoryDate().Month == monthYear.Month & e.GetCategoryDate().Year == monthYear.Year).FirstOrDefault();

@@ -13,7 +13,7 @@ namespace Budget_Tracking_App
         private double budgetAllocated;
         private DateTime monthAndYear;
         private bool isExpense;
-        public List<Transaction> transactionList; //changed access modifier to public
+        public List<Transaction> transactionList;
 
         public Category(string label, double budget, DateTime date, bool isExpense)
         {
@@ -32,8 +32,11 @@ namespace Budget_Tracking_App
         {
             categoryLabel = label;
         }
+        public string GetCategoryLabel()
+        {
+            return categoryLabel;
+        }
 
-        //changed parameter type form budget to double??????
         public void SetCategoryBudget(double budget)
         {
             budgetAllocated = budget;
@@ -44,10 +47,7 @@ namespace Budget_Tracking_App
             monthAndYear = date;
         }
 
-        public string GetCategoryLabel()
-        {
-            return categoryLabel;
-        }
+        
 
         public double GetCategoryBudget()
         {
